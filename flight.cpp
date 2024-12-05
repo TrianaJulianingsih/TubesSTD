@@ -67,3 +67,4 @@ void printNetwork(flightNetwork &N) {
         a = nextAirport(a);
     }
 }
+

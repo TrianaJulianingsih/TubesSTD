@@ -8,7 +8,9 @@ int main() {
     int flightTime;
 
     do {
-        cout << "\nMenu Jaringan Penerbangan:" << endl;
+        cout << "==============================================";
+        cout << "\n--- Selamat Datang Di Aplikasi Penerbangan ---" << endl;
+        cout << "==============================================" << endl;
         cout << "1. Tambah Bandara" << endl;
         cout << "2. Tambah Rute Penerbangan" << endl;
         cout << "3. Tampilkan Jaringan Penerbangan" << endl;
@@ -34,11 +36,11 @@ int main() {
             addRoute(N, startID, destID, flightTime);
             break;
         case 3:
-            cout << "\n========= Rute Jalur Penerbangan =========\n"
+            cout << "\n========= Rute Jalur Penerbangan =========" << endl;
             printNetwork(N);
             break;
         case 0:
-            cout << "Terima kasih telah menggunakan aplikasi jaringan penerbangan dan sampai jumpa!" << endl;
+            cout << "Terima kasih telah menggunakan aplikasi kami dan sampai jumpa!" << endl;
             break;
         default:
             cout << "Pilihan tidak valid. Silakan coba lagi." << endl;
