@@ -5,6 +5,7 @@
 #define firstRoute(A) ((A)->firstRoute)
 #define airportID(A) ((A)->airportID)
 #define destAirportID(R) ((R)->destAirportID)
+#define routePrice(R) ((R)->price)
 #define flightTime(R) ((R)->flightTime)
 #define nextRoute(R) ((R)->nextRoute)
 #include <iostream>
@@ -25,6 +26,14 @@ struct route {
     string destAirportID;
     int flightTime;
     adrRoute nextRoute;
+    int price;
+};
+
+struct Node {
+    adrAirport airport;
+    int totalTime;
+    int totalPrice;
+    string path;
 };
 
 struct flightNetwork {
@@ -34,6 +43,7 @@ struct flightNetwork {
 void createAirport(string newAirportID, adrAirport &a);
 void initNetwork(flightNetwork &N);
 void addAirport(flightNetwork &N, string newAirportID);
-void addRoute(flightNetwork &N, string fromAirportID, string toAirportID, int flightTime);
+void addRoute(flightNetwork &N, string fromAirportID, string toAirportID, int flightTime, int price);
 void printNetwork(flightNetwork &N);
+void searchByDFS(flightNetwork &N, string startAirportID, string targetAirportID, int maxPrice, int maxDistance);
 #endif // FLIGHT_H_INCLUDED
