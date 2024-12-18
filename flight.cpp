@@ -69,56 +69,56 @@ void printNetwork(flightNetwork &N) {
     }
 }
 
-void searchByDFS(flightNetwork &N, string startAirportID, string targetAirportID, int maxPrice, int maxDistance) {
-    adrAirport startAirport = firstAirport(N);
+void updateAirportStatus(flightNetwork &N) {
+    adrAirport a = firstAirport(N);
+    while (a != NULL) {
+        int routeCount = 0;
+        adrRoute r = firstRoute(a);
+        while (r != NULL) {
+            routeCount++;
+            r = nextRoute(r);
+        }
+        a->isBusy = (routeCount > 3);
+        a = nextAirport(a);
+    }
+}
 
-    // Cari bandara awal
+void searchByShortestTime(flightNetwork &N, string startAirportID, string targetAirportID, int maxPrice, int maxDistance) {
+    adrAirport startAirport = firstAirport(N);
     while (startAirport != NULL && airportID(startAirport) != startAirportID) {
         startAirport = nextAirport(startAirport);
     }
-
     if (startAirport == NULL) {
         cout << "Bandara " << startAirportID << " tidak ditemukan!" << endl;
         return;
     }
-
-    // Stack manual untuk DFS
     const int MAX_STACK_SIZE = 100;
     Node stack[MAX_STACK_SIZE];
     int top = -1;
     top++;
     stack[top] = {startAirport, 0, 0, startAirportID};
-
     bool found = false;
-
     while (top >= 0) {
         Node current = stack[top];
         top--;
-
-        // Jika mencapai bandara tujuan
         if (airportID(current.airport) == targetAirportID) {
             cout << "Rute ditemukan: " << current.path << " | Waktu: " << current.totalTime
                  << " menit | Harga: " << current.totalPrice << endl;
             found = true;
             continue;
         }
-
-        // Telusuri rute dari bandara saat ini
         adrRoute r = firstRoute(current.airport);
         while (r != NULL) {
             int newTotalTime = current.totalTime + flightTime(r);
             int newTotalPrice = current.totalPrice + routePrice(r);
-
             if (newTotalTime <= maxDistance && newTotalPrice <= maxPrice) {
-                string newPath = current.path + " -> " + destAirportID(r);
-
+                string nextID = destAirportID(r);
                 adrAirport nextAirport = firstAirport(N);
-                while (nextAirport != NULL && airportID(nextAirport) != destAirportID(r)) {
+                while (nextAirport != NULL && airportID(nextAirport) != nextID) {
                     nextAirport = nextAirport->nextAirport;
                 }
-
                 if (nextAirport != NULL && top + 1 < MAX_STACK_SIZE) {
-                    // Push ke stack
+                    string newPath = current.path + " -> " + nextID;
                     top++;
                     stack[top] = {nextAirport, newTotalTime, newTotalPrice, newPath};
                 }
@@ -126,7 +126,55 @@ void searchByDFS(flightNetwork &N, string startAirportID, string targetAirportID
             r = nextRoute(r);
         }
     }
+    if (!found) {
+        cout << "Tidak ada rute yang memenuhi kriteria!" << endl;
+    }
+}
 
+void searchByLowestPrice(flightNetwork &N, string startAirportID, string targetAirportID, int maxPrice, int maxDistance) {
+    adrAirport startAirport = firstAirport(N);
+    while (startAirport != NULL && airportID(startAirport) != startAirportID) {
+        startAirport = nextAirport(startAirport);
+    }
+    if (startAirport == NULL) {
+        cout << "Bandara " << startAirportID << " tidak ditemukan!" << endl;
+        return;
+    }
+    const int MAX_STACK_SIZE = 100;
+    Node stack[MAX_STACK_SIZE];
+    int top = -1;
+    top++;
+    stack[top] = {startAirport, 0, 0, startAirportID};
+    bool found = false;
+    while (top >= 0) {
+        Node current = stack[top];
+        top--;
+        if (airportID(current.airport) == targetAirportID) {
+            cout << "Rute ditemukan: " << current.path << " | Waktu: " << current.totalTime
+                 << " menit | Harga: " << current.totalPrice << endl;
+            found = true;
+            continue;
+        }
+        adrRoute r = firstRoute(current.airport);
+        while (r != NULL) {
+            int newTotalTime = current.totalTime + flightTime(r);
+            int newTotalPrice = current.totalPrice + routePrice(r);
+            if (newTotalTime <= maxDistance && newTotalPrice <= maxPrice) {
+                string nextID = destAirportID(r);
+                adrAirport nextAirport = firstAirport(N);
+                while (nextAirport != NULL && airportID(nextAirport) != nextID) {
+                    nextAirport = nextAirport->nextAirport;
+                }
+                if (nextAirport != NULL && top + 1 < MAX_STACK_SIZE) {
+                    string newPath = current.path + " -> " + nextID;
+                    // Push ke stack dengan harga lebih rendah diprioritaskan
+                    top++;
+                    stack[top] = {nextAirport, newTotalTime, newTotalPrice, newPath};
+                }
+            }
+            r = nextRoute(r);
+        }
+    }
     if (!found) {
         cout << "Tidak ada rute yang memenuhi kriteria!" << endl;
     }
