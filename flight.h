@@ -20,6 +20,7 @@ struct airport {
     string airportID;
     adrAirport nextAirport;
     adrRoute firstRoute;
+    bool isBusy;
 };
 
 struct route {
@@ -45,5 +46,7 @@ void initNetwork(flightNetwork &N);
 void addAirport(flightNetwork &N, string newAirportID);
 void addRoute(flightNetwork &N, string fromAirportID, string toAirportID, int flightTime, int price);
 void printNetwork(flightNetwork &N);
-void searchByDFS(flightNetwork &N, string startAirportID, string targetAirportID, int maxPrice, int maxDistance);
+void updateAirportStatus(flightNetwork &N);
+void searchByDFSShortestTime(flightNetwork &N, string startAirportID, string targetAirportID, int maxPrice, int maxDistance);
+void searchByDFSLowestPrice(flightNetwork &N, string startAirportID, string targetAirportID, int maxPrice, int maxDistance);
 #endif // FLIGHT_H_INCLUDED
