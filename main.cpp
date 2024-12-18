@@ -5,8 +5,7 @@ int main() {
     initNetwork(N);
     int pilihan;
     string startID, destID;
-    int flightTime;
-    int price;
+    int flightTime, price, maxDistance, maxPrice;
 
     do {
         cout << "==============================================";
@@ -15,7 +14,8 @@ int main() {
         cout << "1. Tambah Bandara" << endl;
         cout << "2. Tambah Rute Penerbangan" << endl;
         cout << "3. Tampilkan Jaringan Penerbangan" << endl;
-        cout << "4. Cari Rute Berdasarkan Harga dan Jarak" << endl;
+        cout << "4. Cari Rute Berdasarkan Jarak Terpendek" << endl;
+        cout << "5. Cari Rute Berdasarkan Harga Terendah" << endl;
         cout << "0. Keluar" << endl;
         cout << "Pilihan Anda: ";
         cin >> pilihan;
@@ -51,9 +51,21 @@ int main() {
             cout << "Masukkan Batas Maksimal Harga: ";
             cin >> price;
             cout << "Masukkan Batas Maksimal Jarak (menit): ";
-            cin >> flightTime;
+            cin >> maxDistance;
             cin.ignore();
-            searchByDFS(N, startID, destID, price, flightTime);
+            updateAirportStatus(N);
+            searchByDFSShortestTime(N, startID, destID, maxPrice, maxDistance);
+            break;
+        case 5:
+            cout << "Masukkan Bandara Asal: ";
+            getline(cin, startID);
+            cout << "Masukkan Bandara Tujuan: ";
+            getline(cin, destID);
+            cout << "Masukkan Batas Maksimal Harga: ";
+            cin >> maxPrice;
+            cout << "Masukkan Batas Maksimal Jarak (menit): ";
+            cin >> maxDistance;
+            searchByDFSLowestPrice(N, startID, destID, maxPrice, maxDistance);
             break;
         case 0:
             cout << "Terima kasih telah menggunakan aplikasi kami dan sampai jumpa!" << endl;
