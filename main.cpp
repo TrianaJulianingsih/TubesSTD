@@ -54,7 +54,7 @@ int main() {
             cin >> maxDistance;
             cin.ignore();
             updateAirportStatus(N);
-            searchByDFSShortestTime(N, startID, destID, maxPrice, maxDistance);
+            searchByShortestTime(N, startID, destID, maxPrice, maxDistance);
             break;
         case 5:
             cout << "Masukkan Bandara Asal: ";
@@ -65,7 +65,7 @@ int main() {
             cin >> maxPrice;
             cout << "Masukkan Batas Maksimal Jarak (menit): ";
             cin >> maxDistance;
-            searchByDFSLowestPrice(N, startID, destID, maxPrice, maxDistance);
+            searchByLowestPrice(N, startID, destID, maxPrice, maxDistance);
             break;
         case 0:
             cout << "Terima kasih telah menggunakan aplikasi kami dan sampai jumpa!" << endl;
