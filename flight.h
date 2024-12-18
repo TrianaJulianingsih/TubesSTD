@@ -47,6 +47,6 @@ void addAirport(flightNetwork &N, string newAirportID);
 void addRoute(flightNetwork &N, string fromAirportID, string toAirportID, int flightTime, int price);
 void printNetwork(flightNetwork &N);
 void updateAirportStatus(flightNetwork &N);
-void searchByDFSShortestTime(flightNetwork &N, string startAirportID, string targetAirportID, int maxPrice, int maxDistance);
-void searchByDFSLowestPrice(flightNetwork &N, string startAirportID, string targetAirportID, int maxPrice, int maxDistance);
+void searchByShortestTime(flightNetwork &N, string startAirportID, string targetAirportID, int maxPrice, int maxDistance);
+void searchByLowestPrice(flightNetwork &N, string startAirportID, string targetAirportID, int maxPrice, int maxDistance);
 #endif // FLIGHT_H_INCLUDED
