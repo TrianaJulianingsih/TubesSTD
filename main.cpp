@@ -56,7 +56,7 @@ int main() {
             updateAirportStatus(N);
             searchByShortestTime(N, startID, destID, maxPrice, maxDistance);
             break;
-        case 5:
+        case 5: 6
             cout << "Masukkan Bandara Asal: ";
             getline(cin, startID);
             cout << "Masukkan Bandara Tujuan: ";
