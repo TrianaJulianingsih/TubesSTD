@@ -152,3 +152,100 @@ void printRoutesByTime(flightNetwork &N) {
         delete temp;
     }
 }
+
+void dfsShortestRoute(flightNetwork &N, string startID, string destID) {
+    Node *stack = NULL;
+    adrAirport startAirport = firstAirport(N);
+
+    while (startAirport != NULL && airportID(startAirport) != startID) {
+        startAirport = nextAirport(startAirport);
+    }
+
+    if (startAirport == NULL) {
+        cout << "Bandara " << startID << " tidak ditemukan." << endl;
+        return;
+    }
+
+    stack = new Node{startID, 0, startID, NULL};
+    int shortestDistance = INT_MAX;
+    string shortestPath = "";
+
+    while (stack != NULL) {
+        Node *currentNode = stack;
+        stack = stack->next;
+
+        adrAirport currentAirport = firstAirport(N);
+        while (currentAirport != NULL && airportID(currentAirport) != currentNode->airportID) {
+            currentAirport = nextAirport(currentAirport);
+        }
+
+        if (currentAirport == NULL) {
+            delete currentNode;
+            continue;
+        }
+
+        if (currentNode->airportID == destID) {
+            if (currentNode->distance < shortestDistance) {
+                shortestDistance = currentNode->distance;
+                shortestPath = currentNode->path;
+            }
+            delete currentNode;
+            continue;
+        }
+
+        adrRoute route = firstRoute(currentAirport);
+        while (route != NULL) {
+            Node *newNode = new Node{
+                destAirportID(route),
+                currentNode->distance + flightTime(route),
+                currentNode->path + " -> " + destAirportID(route),
+                stack
+            };
+            stack = newNode;
+            route = nextRoute(route);
+        }
+
+        delete currentNode;
+    }
+
+    if (shortestPath != "") {
+        cout << "Jalur terpendek: " << shortestPath << " | Waktu: " << shortestDistance << " menit" << endl;
+    } else {
+        cout << "Tidak ada jalur dari " << startID << " ke " << destID << "." << endl;
+    }
+}
+
+void deleteRoute(flightNetwork &N, string fromAirportID, string toAirportID) {
+    adrAirport fromAirport = firstAirport(N);
+
+    while (fromAirport != NULL && airportID(fromAirport) != fromAirportID) {
+        fromAirport = nextAirport(fromAirport);
+    }
+
+    if (fromAirport == NULL) {
+        cout << "Bandara " << fromAirportID << " tidak ditemukan." << endl;
+        return;
+    }
+
+    adrRoute prevRoute = NULL;
+    adrRoute currentRoute = firstRoute(fromAirport);
+
+    while (currentRoute != NULL && destAirportID(currentRoute) != toAirportID) {
+        prevRoute = currentRoute;
+        currentRoute = nextRoute(currentRoute);
+    }
+
+    if (currentRoute == NULL) {
+        cout << "Rute ke " << toAirportID << " tidak ditemukan." << endl;
+        return;
+    }
+
+    if (prevRoute == NULL) {
+        firstRoute(fromAirport) = nextRoute(currentRoute);
+    } else {
+        nextRoute(prevRoute) = nextRoute(currentRoute);
+    }
+
+    delete currentRoute;
+    cout << "Rute dari " << fromAirportID << " ke " << toAirportID << " berhasil dihapus." << endl;
+}
