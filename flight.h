@@ -34,6 +34,13 @@ struct flightNetwork {
     adrAirport firstAirport;
 };
 
+struct Node {
+    string airportID;
+    int distance;
+    string path;
+    Node *next;
+};
+
 void createAirport(string newAirportID, adrAirport &a);
 void initNetwork(flightNetwork &N);
 void addAirport(flightNetwork &N, string newAirportID);
@@ -41,4 +48,6 @@ void addRoute(flightNetwork &N, string fromAirportID, string toAirportID, int fl
 void printNetwork(flightNetwork &N);
 void printRoutesByPrice(flightNetwork &N);
 void printRoutesByTime(flightNetwork &N);
-#endif // FLIGHT_H_INCLUDED
+void dfsShortestRoute(flightNetwork &N, string startID, string destID);
+void deleteRoute(flightNetwork &N, string fromAirportID, string toAirportID);
+#endif 
